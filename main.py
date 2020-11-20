@@ -51,6 +51,7 @@ def init_oled():
     
  
 def display(oled, wifi_data, temp_humi_data):
+    oled.fill(0x00)
     if wifi_data:
         show_wifi_text(wifi_data, oled)
     elif temp_humi_data:
