@@ -1,3 +1,4 @@
+# 红外人体感应
 import time
 
 from machine import Pin

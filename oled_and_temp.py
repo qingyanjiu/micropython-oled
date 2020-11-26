@@ -1,3 +1,4 @@
+# oled屏幕显示温湿度
 import dht
 import network
 from machine import I2C
