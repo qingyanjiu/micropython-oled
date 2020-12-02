@@ -1,0 +1,68 @@
+esphome:
+  name: nodemcu
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "LOUISAP"
+  password: "19831226lc"
+  manual_ip:
+    static_ip: 192.168.199.81
+    gateway: 192.168.199.1
+    subnet: 255.255.255.0
+
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Nodemcu Fallback Hotspot"
+    password: "gqlqqSTdY2bJ"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "19831226lc"
+
+ota:
+  password: "19831226lc"
+
+sensor:
+  - platform: dht
+    pin: 5
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 10s
+    model: dht11
+
+# switch:
+#   - platform: gpio
+#     name: switch
+#     pin:
+#       number: 4
+#       inverted: yes
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: 13
+    num_leds: 30
+    rgb_order: GRB
+    name: "color LED"
+    id: 'led'
+
+output:
+  - platform: gpio
+    pin: 12
+    id: 'sound_sensor_out'
+switch:
+  - platform: output
+    name: "Sound Sensor Output"
+    output: 'sound_sensor_out'
+    inverted: yes
+    on_turn_on:
+    - light.turn_on: led
+    on_turn_off:
+    - light.turn_off: led

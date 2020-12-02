@@ -1,0 +1,56 @@
+esphome:
+  name: esp
+  platform: ESP8266
+  board: esp12e
+
+wifi:
+  ssid: "LOUISAP"
+  password: "19831226lc"
+  manual_ip:
+    static_ip: 192.168.199.80
+    gateway: 192.168.199.1
+    subnet: 255.255.255.0
+
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp Fallback Hotspot"
+    password: "HckjgacRHWYv"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "19831226lc"
+
+ota:
+  password: "19831226lc"
+
+sensor:
+  - platform: dht
+    pin: 5
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 10s
+    model: dht11
+
+switch:
+  - platform: gpio
+    name: switch
+    pin:
+      number: 4
+      inverted: yes
+
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: 13
+    num_leds: 30
+    rgb_order: BRG
+    name: "color LED"
