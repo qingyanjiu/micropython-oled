@@ -47,22 +47,24 @@ sensor:
 light:
   - platform: fastled_clockless
     chipset: WS2812B
-    pin: 13
+    pin: 12
     num_leds: 30
     rgb_order: GRB
     name: "color LED"
     id: 'led'
 
-output:
+binary_sensor:
   - platform: gpio
-    pin: 12
-    id: 'sound_sensor_out'
-switch:
-  - platform: output
-    name: "Sound Sensor Output"
-    output: 'sound_sensor_out'
-    inverted: yes
-    on_turn_on:
-    - light.turn_on: led
-    on_turn_off:
-    - light.turn_off: led
+    pin:
+      number: 13
+    id: 'person_sensor'
+    on_state:
+      then:
+      - lambda: |-
+          if (id(person_sensor).state == 1) {
+            auto call = id(led).turn_on();
+            call.perform();
+          } else {
+            auto call = id(led).turn_off();
+            call.perform();
+          }
