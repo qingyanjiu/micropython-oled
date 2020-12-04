@@ -10,6 +10,7 @@ wifi:
     static_ip: 192.168.199.81
     gateway: 192.168.199.1
     subnet: 255.255.255.0
+    dns1: 192.168.199.1
 
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
@@ -26,6 +27,12 @@ api:
 
 ota:
   password: "19831226lc"
+
+#从sntp服务器获取日期
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: "Asia/Shanghai"
 
 sensor:
   - platform: dht
@@ -59,9 +66,11 @@ binary_sensor:
       number: 13
     id: 'person_sensor'
     on_state:
+#      当小时数在20点后以及8点之前(time.hour是从0到23，所以小时都要-1)，以及检测到有人经过的时候，打开灯
       then:
       - lambda: |-
-          if (id(person_sensor).state == 1) {
+          auto time = id(sntp_time).now();
+          if (id(person_sensor).state == 1 && (time.hour > 19 || time.hour < 7)) {
             auto call = id(led).turn_on();
             call.perform();
           } else {
