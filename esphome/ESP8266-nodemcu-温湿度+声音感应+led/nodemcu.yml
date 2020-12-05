@@ -1,5 +1,5 @@
 esphome:
-  name: nodemcu
+  name: livingroom
   platform: ESP8266
   board: nodemcuv2
 
@@ -7,7 +7,7 @@ wifi:
   ssid: "LOUISAP"
   password: "19831226lc"
   manual_ip:
-    static_ip: 192.168.199.81
+    static_ip: 192.168.199.82
     gateway: 192.168.199.1
     subnet: 255.255.255.0
     dns1: 192.168.199.1
@@ -15,8 +15,8 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Nodemcu Fallback Hotspot"
-    password: "gqlqqSTdY2bJ"
+    ssid: "A Fallback Hotspot"
+    password: "wlPOqwGHh7yH"
 
 # Enable logging
 logger:
