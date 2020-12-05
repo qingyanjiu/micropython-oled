@@ -1,0 +1,35 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+logger:
+  default: info
+
+homeassistant:
+  customize: !include customize.yaml
+  name: 我的家
+  latitude: 31.853194
+  longitude: 117.148063
+  elevation: 0
+  unit_system: metric
+  time_zone: Asia/Shanghai
+  whitelist_external_dirs:
+
+havcs:
+  platform:                               # 音箱平台服务网关，至少启用一个
+    - aligenie
+  http:
+    clients:
+      aligenie123456: suibian
+    ha_url: http://localhost:8123
+    expire_in_hours: 8760
+  device_config: ui
