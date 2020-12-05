@@ -1,0 +1,91 @@
+esphome:
+  name: nodemcu
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "LOUISAP"
+  password: "19831226lc"
+  manual_ip:
+    static_ip: 192.168.199.81
+    gateway: 192.168.199.1
+    subnet: 255.255.255.0
+    dns1: 192.168.199.1
+
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Nodemcu Fallback Hotspot"
+    password: "gqlqqSTdY2bJ"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "19831226lc"
+
+ota:
+  password: "19831226lc"
+
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: "Asia/Shanghai"
+
+sensor:
+  - platform: dht
+    pin: 5
+    temperature:
+      name: "Temperature"
+    humidity:
+      name: "Humidity"
+    update_interval: 10s
+    model: dht11
+
+# switch:
+#   - platform: gpio
+#     name: switch
+#     pin:
+#       number: 4
+#       inverted: yes
+
+light:
+  - platform: fastled_clockless
+    restore_mode: ALWAYS_OFF
+    chipset: WS2812B
+    pin: 12
+    num_leds: 30
+    rgb_order: GRB
+    name: "color LED"
+    id: 'led'
+
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 4
+      inverted: True
+    id: 'sound_sensor'
+    filters:
+      - delayed_off: 10s
+      #invert: Simple filter that just inverts every value from the binary sensor.
+      #
+      #delayed_on: When a signal ON is received, wait for the specified time period until publishing an ON state. If an OFF value is received while waiting, the ON action is discarded. Or in other words: Only send an ON value if the binary sensor has stayed ON for at least the specified time period. Useful for debouncing push buttons.
+      #
+      #delayed_off: When a signal OFF is received, wait for the specified time period until publishing an OFF state. If an ON value is received while waiting, the OFF action is discarded. Or in other words: Only send an OFF value if the binary sensor has stayed OFF for at least the specified time period. Useful for debouncing push buttons.
+      #
+      #delayed_on_off: Only send an ON or OFF value if the binary sensor has stayed in the same state for at least the specified time period. Useful for debouncing binary switches.
+      #
+      #lambda: Specify any lambda for more complex filters. The input value from the binary sensor is x and you can return true for ON, false for OFF, and {} to stop the filter chain
+    on_state:
+      then:
+      - lambda: |-
+          auto time = id(sntp_time).now();
+          if (id(sound_sensor).state == 1 && (time.hour > 19 || time.hour < 6)) {
+            auto call = id(led).turn_on();
+            call.perform();
+          } else {
+            auto call = id(led).turn_off();
+            call.perform();
+          }
