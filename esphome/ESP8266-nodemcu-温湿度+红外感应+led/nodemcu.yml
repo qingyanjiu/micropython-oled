@@ -1,5 +1,5 @@
 esphome:
-  name: nodemcu
+  name: liveingroom
   platform: ESP8266
   board: nodemcuv2
 
@@ -7,7 +7,7 @@ wifi:
   ssid: "LOUISAP"
   password: "19831226lc"
   manual_ip:
-    static_ip: 192.168.199.81
+    static_ip: 192.168.199.82
     gateway: 192.168.199.1
     subnet: 255.255.255.0
     dns1: 192.168.199.1
@@ -15,8 +15,8 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Nodemcu Fallback Hotspot"
-    password: "gqlqqSTdY2bJ"
+    ssid: "A Fallback Hotspot"
+    password: "wlPOqwGHh7yH"
 
 # Enable logging
 logger:
@@ -28,52 +28,47 @@ api:
 ota:
   password: "19831226lc"
 
-#从sntp服务器获取日期
 time:
   - platform: sntp
     id: sntp_time
     timezone: "Asia/Shanghai"
 
-sensor:
-  - platform: dht
-    pin: 5
-    temperature:
-      name: "Temperature"
-    humidity:
-      name: "Humidity"
-    update_interval: 10s
-    model: dht11
+light:
+  - platform: fastled_clockless
+    restore_mode: ALWAYS_OFF
+    chipset: WS2812B
+    pin: 12
+    num_leds: 15
+    rgb_order: GRB
+    name: "color LED"
+    id: 'led_livingroom'
 
 # switch:
 #   - platform: gpio
 #     name: switch
 #     pin:
-#       number: 4
+#       number: 12
 #       inverted: yes
-
-light:
-  - platform: fastled_clockless
-    chipset: WS2812B
-    pin: 12
-    num_leds: 30
-    rgb_order: GRB
-    name: "color LED"
-    id: 'led'
+#     id: 'led_livingroom'
 
 binary_sensor:
   - platform: gpio
     pin:
-      number: 13
-    id: 'person_sensor'
+      number: 4
+    id: 'red_ray_livingroom'
+    filters:
+#     调整持续2s有感应到热度变化才触发高电平,触发高电平后10s才接受低电平输出
+#     将HC-SR501的传感器灵敏度和封锁时间都调到最低，效果不错
+      - delayed_off: 10s
+      - delayed_on: 2s
     on_state:
-#      当小时数在20点后以及8点之前(time.hour是从0到23，所以小时都要-1)，以及检测到有人经过的时候，打开灯
       then:
       - lambda: |-
           auto time = id(sntp_time).now();
-          if (id(person_sensor).state == 1 && (time.hour > 19 || time.hour < 7)) {
-            auto call = id(led).turn_on();
+          if (id(red_ray_livingroom).state == 1 && (time.hour > 18 || time.hour < 18)) {
+            auto call = id(led_livingroom).turn_on();
             call.perform();
           } else {
-            auto call = id(led).turn_off();
+            auto call = id(led_livingroom).turn_off();
             call.perform();
           }

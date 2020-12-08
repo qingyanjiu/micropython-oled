@@ -1,3 +1,4 @@
+#声音传感器不灵敏的不好用
 esphome:
   name: livingroom
   platform: ESP8266
