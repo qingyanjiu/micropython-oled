@@ -8,6 +8,6 @@ def start():
     while True:
         tm = oled_and_temp.get_temp_humi()
         oled_and_temp.display(oled, wifi_data=None, temp_humi_data=tm)
-        time.sleep(10)
+        time.sleep(300)
 
 
