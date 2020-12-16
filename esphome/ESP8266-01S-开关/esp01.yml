@@ -1,7 +1,11 @@
 esphome:
   name: 01s
   platform: ESP8266
-  board: esp01
+#  这个是1m flash的，可以ota升级，如果是esp01 则默认是512m flash，无法ota升级,会提示空间不够
+#  1m的是黑色板子，512m是蓝色。淘宝买的基本是黑色还好
+#  参考 https://community.home-assistant.io/t/esp-does-not-have-enough-space-to-store-ota-file/131083/4
+#  esp8266 download tool烧录的时候也要选8M的flash size 看图 esp8266-01-1M烧录.jpg
+  board: esp01_1m
 
 wifi:
   ssid: "LOUISAP"
