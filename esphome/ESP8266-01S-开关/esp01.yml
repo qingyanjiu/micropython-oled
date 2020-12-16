@@ -1,0 +1,38 @@
+esphome:
+  name: 01s
+  platform: ESP8266
+  board: esp01
+
+wifi:
+  ssid: "LOUISAP"
+  password: "19831226lc"
+  manual_ip:
+    static_ip: 192.168.199.83
+    gateway: 192.168.199.1
+    subnet: 255.255.255.0
+    dns1: 192.168.199.1
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "01S Fallback Hotspot"
+    password: "HBn0gmW9uPOm"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "19831226lc"
+
+ota:
+  password: "19831226lc"
+
+binary_sensor:
+  - platform: gpio
+    pin:
+#      TX-gpio1  RX-gpi03  gpio2默认可用 gpio0应该也可以作为in和out的pin用
+      number: 1
+      inverted: false
+    id: "button"
