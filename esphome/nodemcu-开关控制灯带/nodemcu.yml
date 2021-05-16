@@ -1,0 +1,51 @@
+esphome:
+  name: study_room_light_strip
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "LOUISAP"
+  password: "19831226lc"
+  manual_ip:
+    static_ip: 192.168.0.81
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
+    dns1: 192.168.0.1
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "study_room_light_strip"
+    password: "vIAOGf2D8MJc"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "19831226lc"
+
+ota:
+  password: "19831226lc"
+
+light:
+  - platform: fastled_clockless
+    restore_mode: ALWAYS_OFF
+    chipset: WS2812B
+    pin: 12
+    num_leds: 15
+    rgb_order: GRB
+    name: "color LED"
+    id: 'led_stripe'
+
+binary_sensor:
+  - platform: gpio
+    pin:
+#      TX-gpio1  RX-gpi03  gpio2默认可用 gpio0应该也可以作为in和out的pin用
+      number: 5
+      inverted: false
+    id: "button"
+    on_press:
+      then:
+      - light.toggle: "led_stripe"
