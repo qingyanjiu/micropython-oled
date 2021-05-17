@@ -29,6 +29,7 @@ api:
 ota:
   password: "19831226lc"
 
+#一次控制俩灯带
 light:
   - platform: fastled_clockless
     restore_mode: ALWAYS_OFF
@@ -38,6 +39,14 @@ light:
     rgb_order: GRB
     name: "color LED"
     id: 'led_stripe'
+  - platform: fastled_clockless
+    restore_mode: ALWAYS_OFF
+    chipset: WS2812B
+    pin: 4
+    num_leds: 15
+    rgb_order: GRB
+    name: "color LED"
+    id: 'led_stripe2'
 
 binary_sensor:
   - platform: gpio
@@ -49,3 +58,4 @@ binary_sensor:
     on_press:
       then:
       - light.toggle: "led_stripe"
+      - light.toggle: "led_stripe2"
